@@ -1,2 +1,68 @@
 name: pratsu
 on: [push]
+
+package StepDefi;
+import io.cucumber.java.en.*;
+import org.junit.Assert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+import static org.junit.Assert.assertTrue;
+
+public class Registration {
+
+    WebDriver driver;
+
+    @Given("User is on the registration page")
+    public void user_is_on_the_registration_page() {
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        driver.get("https://demowebshop.tricentis.com/register");
+    }
+
+    @When("User enters valid registration details")
+    public void user_enters_valid_registration_details() {
+        driver.findElement(By.id("gender-male")).click();
+        driver.findElement(By.id("FirstName")).sendKeys("Omkar");
+        driver.findElement(By.id("LastName")).sendKeys("Kale");
+        driver.findElement(By.id("Email")).sendKeys("Omkarkale" + System.currentTimeMillis() + "@test.com");
+        driver.findElement(By.id("Password")).sendKeys("Omkar@123");
+        driver.findElement(By.id("ConfirmPassword")).sendKeys("Omkar@123");
+    }
+
+    @And("Clicks on the register button")
+    public void clicks_on_the_register_button() {
+        driver.findElement(By.id("register-button")).click();
+    }
+
+    @Then("User should be successfully registered")
+    public void user_should_be_successfully_registered() {
+        WebElement confirmationMessage = driver.findElement(By.className("result"));
+        assertTrue(confirmationMessage.isDisplayed());
+        Assert.assertEquals("Your registration completed", confirmationMessage.getText());
+    }
+
+   // @Given("User is on the registration page")
+    //public void user_is_on_registration_page() {
+     //   driver.get("https://demowebshop.tricentis.com/register");
+  //  }
+
+    @When("User submits the registration form without entering any details")
+    public void user_submits_empty_form() {
+        driver.findElement(By.id("gender-male"));
+        driver.findElement(By.id("FirstName")).sendKeys(" ");
+        driver.findElement(By.id("LastName")).sendKeys(" ");
+        driver.findElement(By.id("Email")).sendKeys(" " + System.currentTimeMillis() + " ");
+        driver.findElement(By.id("Password")).sendKeys(" ");
+        driver.findElement(By.id("ConfirmPassword")).sendKeys(" ");
+        driver.findElement(By.id("register-button")).click();
+
+
+    driver.quit();
+}
+
+}
