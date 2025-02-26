@@ -1,4 +1,4 @@
-name: pratsu
+name: pratsu Registration
 on: [push]
 
 package StepDefi;
